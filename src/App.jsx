@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
@@ -9,8 +9,26 @@ import { CalendarDays, MapPin, Users, Tent, ShoppingCart, Clock, MessageSquare, 
 import './App.css'
 
 function App() {
-  const [suggestions, setSuggestions] = useState('')
-  const [checkedItems, setCheckedItems] = useState({})
+  // Load initial state from localStorage or use empty object
+  const [suggestions, setSuggestions] = useState(() => {
+    const saved = localStorage.getItem('festival-suggestions')
+    return saved ? saved : ''
+  })
+  
+  const [checkedItems, setCheckedItems] = useState(() => {
+    const saved = localStorage.getItem('festival-checklist')
+    return saved ? JSON.parse(saved) : {}
+  })
+
+  // Save checkedItems to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('festival-checklist', JSON.stringify(checkedItems))
+  }, [checkedItems])
+
+  // Save suggestions to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('festival-suggestions', suggestions)
+  }, [suggestions])
 
   const handleItemCheck = (category, index) => {
     const key = `${category}-${index}`
