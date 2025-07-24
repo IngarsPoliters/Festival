@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Textarea } from '@/components/ui/textarea.jsx'
 import { Checkbox } from '@/components/ui/checkbox.jsx'
-import { CalendarDays, MapPin, Users, Tent, ShoppingCart, Clock, MessageSquare, AlertTriangle, CheckCircle, Star, Cloud, CloudRain } from 'lucide-react'
+import { CalendarDays, MapPin, Users, Tent, ShoppingCart, Clock, AlertTriangle, CheckCircle, Star, Cloud, CloudRain } from 'lucide-react'
 import './App.css'
 
 function App() {
   // Load initial state from localStorage or use empty object
-  const [suggestions, setSuggestions] = useState(() => {
-    const saved = localStorage.getItem('festival-suggestions')
-    return saved ? saved : ''
-  })
-  
   const [checkedItems, setCheckedItems] = useState(() => {
     const saved = localStorage.getItem('festival-checklist')
     return saved ? JSON.parse(saved) : {}
@@ -24,11 +17,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('festival-checklist', JSON.stringify(checkedItems))
   }, [checkedItems])
-
-  // Save suggestions to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('festival-suggestions', suggestions)
-  }, [suggestions])
 
   const handleItemCheck = (category, index) => {
     const key = `${category}-${index}`
@@ -253,7 +241,7 @@ function App() {
         </header>
 
         <Tabs defaultValue="packing" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="packing" className="flex items-center gap-2">
               <ShoppingCart className="w-4 h-4" />
               Smart Packing
@@ -265,10 +253,6 @@ function App() {
             <TabsTrigger value="rules" className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
               Festival Rules
-            </TabsTrigger>
-            <TabsTrigger value="suggestions" className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4" />
-              Suggestions
             </TabsTrigger>
           </TabsList>
 
@@ -471,49 +455,6 @@ function App() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="suggestions" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Group Suggestions</CardTitle>
-                <CardDescription>
-                  Share your ideas, suggestions, or things we might have missed!
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Textarea
-                  placeholder="Add your suggestions here... (e.g., additional items to pack, places to stop, activities to do, etc.)"
-                  value={suggestions}
-                  onChange={(e) => setSuggestions(e.target.value)}
-                  className="min-h-32"
-                />
-                <Button onClick={() => alert('Suggestions saved! (In a real app, this would save to a database)')}>
-                  Save Suggestions
-                </Button>
-                
-                <div className="mt-6">
-                  <h4 className="font-semibold mb-3">Quick Reminders</h4>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <p className="text-sm font-medium text-yellow-800">Don't Forget!</p>
-                      <p className="text-sm text-yellow-700">Check weather forecast before packing</p>
-                    </div>
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-sm font-medium text-blue-800">Travel Tip</p>
-                      <p className="text-sm text-blue-700">Leave early to avoid traffic</p>
-                    </div>
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-sm font-medium text-green-800">Money Saving</p>
-                      <p className="text-sm text-green-700">Bring your own food and drinks</p>
-                    </div>
-                    <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                      <p className="text-sm font-medium text-purple-800">Safety</p>
-                      <p className="text-sm text-purple-700">Keep emergency contacts handy</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
       </div>
     </div>
