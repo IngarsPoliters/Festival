@@ -165,8 +165,8 @@ function App() {
     {
       date: 'Wednesday, July 30th, 2025',
       events: [
-        { time: 'Afternoon', activity: 'Friends A and N fly from Spain to Dublin' },
-        { time: 'After 8:00 PM', activity: 'Meet friends A and N in Athlone. Pick them up' },
+        { time: 'Afternoon', activity: 'Friends Alina and Noel fly from Spain to Dublin' },
+        { time: 'After 8:00 PM', activity: 'Meet friends Alina and Noel in Athlone. Pick them up' },
         { time: 'Dinner & Drinks', activity: 'Head to The Dark Horse for food and pints' },
         { time: 'Night', activity: 'Check into Glen Abhainn Village Dublin Road, Athlone' }
       ]
