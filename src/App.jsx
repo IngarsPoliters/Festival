@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ReactWeather, { useOpenWeather } from 'react-open-weather'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -204,15 +205,14 @@ function App() {
     'Do not follow sat nav / Google Maps directly to the festival site'
   ]
 
-  const weatherInfo = {
-    forecast: "Typical Irish summer weather expected: mild temperatures (12-18°C), frequent rain showers, and cloudy conditions",
-    tips: [
-      "Layering is essential - temperatures can vary throughout the day",
-      "Rain gear is non-negotiable - even if forecast looks good",
-      "Waterproof footwear highly recommended for muddy conditions",
-      "Pack more socks than you think you'll need!"
-    ]
-  }
+  // Weather forecast for Waterford, Ireland (festival location)
+  const { data, isLoading, errorMessage } = useOpenWeather({
+    key: import.meta.env.VITE_OPENWEATHER_API_KEY || 'demo_key',
+    lat: '52.25',
+    lon: '-7.12',
+    lang: 'en',
+    unit: 'metric'
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -261,20 +261,36 @@ function App() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Cloud className="w-5 h-5 text-blue-600" />
-                  Weather-Adjusted Packing Guide
+                  Weather Forecast for Festival
                 </CardTitle>
                 <CardDescription>
-                  {weatherInfo.forecast}
+                  Live weather forecast for Waterford, Ireland during the festival period
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {weatherInfo.tips.map((tip, index) => (
-                    <div key={index} className="flex items-start gap-2">
-                      <span className="text-blue-500 mt-1">•</span>
-                      <span className="text-sm text-gray-700">{tip}</span>
+                <div className="weather-widget">
+                  <ReactWeather
+                    isLoading={isLoading}
+                    errorMessage={errorMessage}
+                    data={data}
+                    locationLabel="Waterford, Ireland"
+                    showForecast={true}
+                    theme={{
+                      backgroundColor: 'transparent',
+                      borderRadius: '8px',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  {errorMessage && (
+                    <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-sm text-yellow-800">
+                        <strong>Weather data unavailable:</strong> {errorMessage}
+                      </p>
+                      <p className="text-xs text-yellow-700 mt-2">
+                        To show live weather, add your free OpenWeatherMap API key to the environment variables.
+                      </p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
